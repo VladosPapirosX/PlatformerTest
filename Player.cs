@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float speed = 3f; // speed movement
     [SerializeField] private int lives = 5; // health point 
-    [SerializeField] private float jumpForce = 15f; // jump power
+    [SerializeField] private float jumpForce = 6f; // jump power
     private bool isGrounded = false;
 
 
@@ -14,6 +14,18 @@ public class Player : MonoBehaviour
     private Animator anim;
     private SpriteRenderer sprite;
 
+
+    public static Player Instance { get; set; }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        isGrounded = true;
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        isGrounded = false;
+    }
 
     private States State
     {
@@ -26,6 +38,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponentInChildren<SpriteRenderer>();
+        Instance = this;
     }
 
     private void FixedUpdate()
@@ -61,10 +74,16 @@ public class Player : MonoBehaviour
 
     private void CheckGround()
     {
-        Collider2D[] collider = Physics2D.OverlapCircleAll(transform.position, 0.9f);
+        Collider2D[] collider = Physics2D.OverlapCircleAll(transform.position, 0.8f);
         isGrounded = collider.Length > 1;
 
-        if (isGrounded ) State = States.jump;
+        if (!isGrounded ) State = States.jump;
+    }
+
+    public void GetGamage()
+    {
+        lives -= 1;
+        Debug.Log(lives);
     }
 }
 
