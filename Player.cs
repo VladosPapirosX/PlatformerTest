@@ -80,7 +80,7 @@ public class Player : MonoBehaviour
         if (!isGrounded ) State = States.jump;
     }
 
-    public void GetGamage()
+    public void GetDamage()
     {
         lives -= 1;
         Debug.Log(lives);
